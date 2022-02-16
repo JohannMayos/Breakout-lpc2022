@@ -10,6 +10,15 @@ size = (720, 710)
 screen = pygame.display.set_mode(size)
 pygame.display.set_caption("Breakout Game")
 
+# drawing the box area of the game
+game_box_line_left = pygame.draw.line(screen, COLOR_WHITE, (0, 720), (0, -720), 20)
+game_box_line_up = pygame.draw.line(screen, COLOR_WHITE, (720, 0), (-720, 0), 40)
+game_box_line_right = pygame.draw.line(screen, COLOR_WHITE, (720, 720), (720, -720), 20)
+
+# drawing the hud lines of the score (1p - 2p scores)
+game_box_line_hud_1 = pygame.draw.line(screen, COLOR_WHITE, (50, 75), (50, -720), 10)
+game_box_line_hud_2 = pygame.draw.line(screen, COLOR_WHITE, (450, 75), (450, -720), 10)
+
 # score text
 score_font = pygame.font.Font('PressStart2P-vaV7.ttf', 44)
 score_text = score_font.render('000', True, COLOR_WHITE, COLOR_BLACK)

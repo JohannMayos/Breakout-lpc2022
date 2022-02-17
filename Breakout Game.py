@@ -40,7 +40,7 @@ ball_dx = 1
 ball_dy = 1
 
 # score text
-score_font = pygame.font.Font('PressStart2P-vaV7.ttf', 44)
+score_font = pygame.font.Font('breakout.ttf', 44)
 score_text = score_font.render('000', True, COLOR_WHITE, COLOR_BLACK)
 score_text_rect = score_text.get_rect()
 score_text_rect.center = (570, 90)

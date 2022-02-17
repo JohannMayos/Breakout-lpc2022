@@ -34,8 +34,8 @@ paddle_move_right = False
 ball = pygame.image.load("ball.jpg")
 ball_x = 300
 ball_y = 300
-ball_dx = 1
-ball_dy = 1
+ball_dx = 3
+ball_dy = 3
 
 # score text
 score_font = pygame.font.Font('PressStart2P-vaV7.ttf', 44)
@@ -74,6 +74,36 @@ while game_loop:
     # ball movement
     ball_x = ball_x + ball_dx
     ball_y = ball_y + ball_dy
+
+    # ball collision with the paddle
+    if ball_y >= 600:
+        if paddle_x < ball_y + 75:
+            if paddle_x + 75 > ball_y:
+                ball_dy *= -1
+                ball_dx *= 1
+
+    # ball collision with right wall
+    if ball_x > 680:
+        ball_dx *= -1
+        ball_dy *= 1
+
+    # ball collision with upper wall
+    if ball_y <= 0:
+        ball_dx *= 1
+        ball_dy *= -1
+
+    # ball collision with left wall
+    if ball_x == 0:
+        ball_dx *= -1
+        ball_dy *= 1
+
+    # paddle collision with left wall
+    if paddle_x <= 0:
+        paddle_x = 0
+
+    # paddle collision with right wall
+    if paddle_x >= 610:
+        paddle_x = 610
 
     # player up movement
     if paddle_move_left:

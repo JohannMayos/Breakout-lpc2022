@@ -13,27 +13,20 @@ pygame.display.set_caption("Breakout Game")
 
 background = pygame.image.load("background.png")
 
-# drawing the box area of the game
-game_box_line_left = pygame.draw.line(screen, COLOR_WHITE, (0, 710), (0, -710), 25)
-game_box_line_up = pygame.draw.line(screen, COLOR_WHITE, (720, 0), (-720, 0), 40)
-game_box_line_right = pygame.draw.line(screen, COLOR_WHITE, (720, 710), (720, -710), 25)
-
-# drawing the hud lines of the score (1p - 2p scores)
-game_box_line_hud_1 = pygame.draw.line(screen, COLOR_WHITE, (50, 75), (50, -720), 10)
-game_box_line_hud_2 = pygame.draw.line(screen, COLOR_WHITE, (450, 75), (450, -720), 10)
-
-# drawing the paddle marks on box
-paddle_mark_left = pygame.draw.line(screen, COLOR_BLUE, (0, 670), (0, 640), 25)
-paddle_mark_right = pygame.draw.line(screen, COLOR_BLUE, (720, 670), (720, 640), 25)
+# drawing blocks
+block_yellow = pygame.image.load("block_yellow.png")
+block_green = pygame.image.load("block_green.png")
+block_orange = pygame.image.load("block_orange.png")
+block_red = pygame.image.load("block_red.png")
 
 # drawing paddle
-paddle = pygame.image.load("paddle.jpg")
+paddle = pygame.image.load("paddle.png")
 paddle_x = 300
 paddle_move_left = False
 paddle_move_right = False
 
 # ball
-ball = pygame.image.load("ball.jpg")
+ball = pygame.image.load("Ball.png")
 ball_x = 300
 ball_y = 300
 ball_dx = 3
@@ -55,6 +48,7 @@ game_clock = pygame.time.Clock()
 
 while game_loop:
     
+    # clear screen and set background again
     screen.fill(COLOR_BLACK)
     screen.blit(background,(0,0))
 
@@ -80,8 +74,8 @@ while game_loop:
 
     # ball collision with the paddle
     if ball_y >= 600:
-        if paddle_x < ball_y + 75:
-            if paddle_x + 75 > ball_y:
+        if paddle_x < ball_x + 80:
+            if paddle_x + 80 > ball_x:
                 ball_dy *= -1
                 ball_dx *= 1
 
@@ -105,8 +99,8 @@ while game_loop:
         paddle_x = 0
 
     # paddle collision with right wall
-    if paddle_x >= 610:
-        paddle_x = 610
+    if paddle_x >= 625:
+        paddle_x = 625
 
     # player up movement
     if paddle_move_left:
@@ -120,9 +114,19 @@ while game_loop:
     else:
         paddle_x += 0
 
+    # draw objects
     screen.blit(ball, (ball_x, ball_y))
-    screen.blit(paddle, (paddle_x, 640))
+    screen.blit(paddle, (paddle_x, 625))
     screen.blit(score_text, score_text_rect)
+    screen.blit(block_yellow, (15,296))
+    screen.blit(block_yellow, (15,274))
+    screen.blit(block_green, (15,250))
+    screen.blit(block_green, (15,224))
+    screen.blit(block_orange, (15,200))
+    screen.blit(block_orange, (15,176))
+    screen.blit(block_red, (15,152))
+    screen.blit(block_red, (15,128))
+    
 
     # update screen
     pygame.display.flip()

@@ -3,16 +3,73 @@ import pygame
 
 pygame.init()
 
-COLOR_BLACK = (0, 0, 0)
-COLOR_WHITE = (255, 255, 255)
-COLOR_BLUE = (58, 219, 240)
-
 # drawing the screen
 size = (720, 710)
 screen = pygame.display.set_mode(size)
 pygame.display.set_caption("Breakout Game")
 
 background = pygame.image.load("image/background.png")
+
+block_red = (236, 28, 36)
+block_orange = (255, 127, 39)
+block_green = (14, 209, 69)
+block_yellow = (255, 242, 0)
+background_color = (0, 0, 0)
+
+rows = 8
+columns = 14
+
+class blocks():
+    
+    # define width and height for blocks
+    def __init__(self):
+        self.width = 49
+        self.height = 20
+
+    # fuction to set block form, coordinate and your colors 
+    def create_wall(self):
+        self.blocks = []
+        block_individual = []
+
+        for row in range(rows):
+            block_row = []
+
+            for column in range(columns):
+                block_x = column * self.width + 15
+                block_y = row * self.height + 152
+                rect = pygame.Rect(block_x, block_y, self.width, self.height)
+
+                if row == 0 or row == 1:
+                    color = 4
+                elif row == 2 or row == 3:
+                    color = 3
+                elif row == 4 or row == 5:
+                    color = 2
+                elif row == 6 or row == 7:
+                    color = 1
+
+                block_individual = [rect, color]
+                block_row.append(block_individual)
+            self.blocks.append(block_row)
+
+
+    # fuction to draw the blocks
+    def draw_wall_blocks(self):
+        for row in self.blocks:
+            for block in row:
+                if block[1] == 4:
+                    block_col = block_red
+                elif block[1] == 3:
+                    block_col = block_orange
+                elif block[1] == 2:
+                    block_col = block_green
+                elif block[1] == 1:
+                    block_col = block_yellow
+                pygame.draw.rect(screen, block_col, block[0])
+                pygame.draw.rect(screen, background_color, (block[0]), 2)
+
+wall = blocks()
+wall.create_wall()
 
 # drawing paddle
 paddle = pygame.image.load("image/paddle.png")
@@ -29,7 +86,7 @@ ball_dy = 3
 
 # score text
 score_font = pygame.font.Font('breakout.ttf', 44)
-score_text = score_font.render('000', True, COLOR_WHITE, COLOR_BLACK)
+score_text = score_font.render('000', True, (255, 255, 255), (0, 0, 0))
 score_text_rect = score_text.get_rect()
 score_text_rect.center = (570, 90)
 
@@ -44,8 +101,9 @@ game_clock = pygame.time.Clock()
 while game_loop:
     
     # clear screen and set background again
-    screen.fill(COLOR_BLACK)
+    screen.fill(background_color)
     screen.blit(background,(0,0))
+    wall.draw_wall_blocks()
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:

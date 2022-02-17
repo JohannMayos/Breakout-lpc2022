@@ -25,8 +25,17 @@ paddle_mark_left = pygame.draw.line(screen, COLOR_BLUE, (0, 670), (0, 640), 25)
 paddle_mark_right = pygame.draw.line(screen, COLOR_BLUE, (720, 670), (720, 640), 25)
 
 # drawing paddle
-paddle = pygame.draw.line(screen, COLOR_BLUE, (350, 660), (400, 660), 22)
+paddle = pygame.image.load("paddle.jpg")
+paddle_x = 300
+paddle_move_left = False
+paddle_move_right = False
 
+# ball
+ball = pygame.image.load("ball.jpg")
+ball_x = 300
+ball_y = 300
+ball_dx = 1
+ball_dy = 1
 
 # score text
 score_font = pygame.font.Font('PressStart2P-vaV7.ttf', 44)
@@ -43,11 +52,43 @@ game_loop = True
 game_clock = pygame.time.Clock()
 
 while game_loop:
-
+    
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             game_loop = False
+        
+        #  keystroke events
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_LEFT:
+                paddle_move_left = True
+            if event.key == pygame.K_RIGHT:
+                paddle_move_right = True
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_LEFT:
+                paddle_move_left = False
+            if event.key == pygame.K_RIGHT:
+                paddle_move_right = False
 
+    screen.fill(COLOR_BLACK)
+
+    # ball movement
+    ball_x = ball_x + ball_dx
+    ball_y = ball_y + ball_dy
+
+    # player up movement
+    if paddle_move_left:
+        paddle_x -= 5
+    else:
+        paddle_x += 0
+
+    # player down movement
+    if paddle_move_right:
+        paddle_x += 5
+    else:
+        paddle_x += 0
+
+    screen.blit(ball, (ball_x, ball_y))
+    screen.blit(paddle, (paddle_x, 640))
     screen.blit(score_text, score_text_rect)
 
     # update screen

@@ -74,8 +74,13 @@ while game_loop:
 
     # ball collision with the paddle
     if ball_y >= 600:
+<<<<<<< HEAD
         if paddle_x < ball_x + 80:
             if paddle_x + 80 > ball_x:
+=======
+        if paddle_x < ball_x + 75:
+            if paddle_x + 75 > ball_x:
+>>>>>>> 6bf12db176a582f91fd631849275cd3a0ab81894
                 ball_dy *= -1
                 ball_dx *= 1
 

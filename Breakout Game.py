@@ -1,5 +1,6 @@
 import pygame
 
+
 pygame.init()
 
 COLOR_BLACK = (0, 0, 0)
@@ -11,22 +12,16 @@ size = (720, 710)
 screen = pygame.display.set_mode(size)
 pygame.display.set_caption("Breakout Game")
 
-background = pygame.image.load("background.png")
-
-# drawing blocks
-block_yellow = pygame.image.load("block_yellow.png")
-block_green = pygame.image.load("block_green.png")
-block_orange = pygame.image.load("block_orange.png")
-block_red = pygame.image.load("block_red.png")
+background = pygame.image.load("image/background.png")
 
 # drawing paddle
-paddle = pygame.image.load("paddle.png")
+paddle = pygame.image.load("image/paddle.png")
 paddle_x = 300
 paddle_move_left = False
 paddle_move_right = False
 
 # ball
-ball = pygame.image.load("Ball.png")
+ball = pygame.image.load("image/Ball.png")
 ball_x = 300
 ball_y = 300
 ball_dx = 3
@@ -73,14 +68,9 @@ while game_loop:
     ball_y = ball_y + ball_dy
 
     # ball collision with the paddle
-    if ball_y >= 600:
-<<<<<<< HEAD
+    if ball_y >= 605:
         if paddle_x < ball_x + 80:
             if paddle_x + 80 > ball_x:
-=======
-        if paddle_x < ball_x + 75:
-            if paddle_x + 75 > ball_x:
->>>>>>> 6bf12db176a582f91fd631849275cd3a0ab81894
                 ball_dy *= -1
                 ball_dx *= 1
 
@@ -123,15 +113,6 @@ while game_loop:
     screen.blit(ball, (ball_x, ball_y))
     screen.blit(paddle, (paddle_x, 625))
     screen.blit(score_text, score_text_rect)
-    screen.blit(block_yellow, (15,296))
-    screen.blit(block_yellow, (15,274))
-    screen.blit(block_green, (15,250))
-    screen.blit(block_green, (15,224))
-    screen.blit(block_orange, (15,200))
-    screen.blit(block_orange, (15,176))
-    screen.blit(block_red, (15,152))
-    screen.blit(block_red, (15,128))
-    
 
     # update screen
     pygame.display.flip()

@@ -11,6 +11,8 @@ size = (720, 710)
 screen = pygame.display.set_mode(size)
 pygame.display.set_caption("Breakout Game")
 
+background = pygame.image.load("background.png")
+
 # drawing the box area of the game
 game_box_line_left = pygame.draw.line(screen, COLOR_WHITE, (0, 710), (0, -710), 25)
 game_box_line_up = pygame.draw.line(screen, COLOR_WHITE, (720, 0), (-720, 0), 40)
@@ -53,6 +55,9 @@ game_clock = pygame.time.Clock()
 
 while game_loop:
     
+    screen.fill(COLOR_BLACK)
+    screen.blit(background,(0,0))
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             game_loop = False
@@ -68,8 +73,6 @@ while game_loop:
                 paddle_move_left = False
             if event.key == pygame.K_RIGHT:
                 paddle_move_right = False
-
-    screen.fill(COLOR_BLACK)
 
     # ball movement
     ball_x = ball_x + ball_dx

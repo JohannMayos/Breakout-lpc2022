@@ -132,6 +132,13 @@ while game_loop:
                 ball_dy *= -1
                 ball_dx *= 1
 
+    # ball´s deathpoint
+    if ball_y > 650:
+        ball_x = 300
+        ball_y = 300
+        ball_dx *= -1
+        ball_dy *= 1
+
     # ball collision with right wall
     if ball_x > 680:
         ball_dx *= -1

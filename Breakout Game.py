@@ -61,6 +61,11 @@ def create_wall():
             block_individual = [block, color, score]
             block_list.append(block_individual)
 
+
+def play_sounds(none):
+    sounds = pygame.mixer.Sound(none)
+    sounds.play()
+
 # score text
 score_font = pygame.font.Font('breakout.ttf', 44)
 score_text = score_font.render('000', True, (255, 255, 255), (0, 0, 0))
@@ -76,6 +81,9 @@ game_loop = True
 game_clock = pygame.time.Clock()
 
 create_wall()
+pygame.mixer.music.load("breakout.mp3")
+pygame.mixer.music.set_volume(1)
+pygame.mixer.music.play(-1)
 
 while game_loop:
     
@@ -104,17 +112,19 @@ while game_loop:
     ball.y += ball_dy
 
     for block in block_list:
-        block_count = 0
         if ball.colliderect(block[0]):
             ball_dy *= -1
-            block_list[block_count] = (0, 0, 0) 
+            score_1 += block[2]
+            play_sounds("bleep.mp3")
+            block_list.remove(block)
 
     # ball collision with the paddle
     if ball.y >= 605:
-        if paddle_x < ball.x + 80:
-            if paddle_x + 80 > ball.x:
+        if paddle_x < ball.x + 75:
+            if paddle_x + 75 > ball.x:
                 ball_dy *= -1
                 ball_dx *= 1
+                play_sounds("solid.wav")
 
     # ball´s death point
     if ball.y > 650:
@@ -128,16 +138,20 @@ while game_loop:
     if ball.x > 680:
         ball_dx *= -1
         ball_dy *= 1
+        play_sounds("solid.wav")
+
 
     # ball collision with upper wall
     if ball.y <= 0:
         ball_dx *= 1
         ball_dy *= -1
+        play_sounds("solid.wav")
 
     # ball collision with left wall
     if ball.x == 1:
         ball_dx *= -1
         ball_dy *= 1
+        play_sounds("solid.wav")
 
     # paddle collision with left wall
     if paddle_x <= 0:

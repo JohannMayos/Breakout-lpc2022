@@ -15,6 +15,7 @@ block_orange = (255, 127, 39)
 block_green = (14, 209, 69)
 block_yellow = (255, 242, 0)
 background_color = (0, 0, 0)
+white_color = (255, 255, 255)
 
 # drawing paddle
 paddle = pygame.image.load("image/paddle.png")
@@ -28,13 +29,13 @@ ball_x = 400
 ball_y = 400
 ball_dx = 3
 ball_dy = -3
-ball = pygame.Rect(ball_x, ball_y, 15, 15)
 
 block_width = 49
 block_height = 20
 rows = 8
 cols = 14
 block_list = []
+wall_break = 0
 
 def create_wall():
     block_individual = []
@@ -66,15 +67,57 @@ def play_sounds(none):
     sounds = pygame.mixer.Sound(none)
     sounds.play()
 
-# score text
-score_font = pygame.font.Font('breakout.ttf', 44)
-score_text = score_font.render('000', True, (255, 255, 255), (0, 0, 0))
-score_text_rect = score_text.get_rect()
-score_text_rect.center = (570, 90)
 
 # score
 score_1 = 0
 score_2 = 0
+
+# score text
+score_font = pygame.font.Font('breakout.ttf', 44)
+
+def show_score():
+    if score_1 < 10:
+        score_text = score_font.render("00" + str(score_1), True, white_color, background_color)
+    elif score_1 >= 10 and score_1 < 100:
+        score_text = score_font.render("0" + str(score_1), True, white_color, background_color)
+    else:
+        score_text = score_font.render(str(score_1), True, white_color, background_color)
+
+    score_text_rect = score_text.get_rect()
+    score_text_rect.center = (570, 90)
+    screen.blit(score_text, score_text_rect)
+
+
+def pause():
+
+    paused = True
+    while paused:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+            
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_c:
+                    paused = False
+
+                elif event.key == pygame.K_q:
+                    pygame.quit()
+                    quit()
+
+        screen.fill(background_color)
+        font = pygame.font.Font('breakout.ttf', 44)
+        pause = font.render("Paused", True, white_color)
+        pause_text = font.render("Press C to continue", True, white_color)
+        quit_text = font.render("Press Q to quit", True, white_color)
+
+        screen.blit(pause, (150, 150))
+        screen.blit(pause_text, (150, 250))
+        screen.blit(quit_text, (150, 350))
+
+        pygame.display.update()
+        game_clock.tick(15)
+
 
 # game loop
 game_loop = True
@@ -99,24 +142,33 @@ while game_loop:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
                 paddle_move_left = True
-            if event.key == pygame.K_RIGHT:
+            elif event.key == pygame.K_RIGHT:
                 paddle_move_right = True
-        if event.type == pygame.KEYUP:
+            elif event.key == pygame.K_p:
+                pause()
+        elif event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT:
                 paddle_move_left = False
-            if event.key == pygame.K_RIGHT:
+            elif event.key == pygame.K_RIGHT:
                 paddle_move_right = False
 
     # ball movement
     ball.x += ball_dx
     ball.y += ball_dy
 
+    # block collision and scoring up
     for block in block_list:
         if ball.colliderect(block[0]):
             ball_dy *= -1
             score_1 += block[2]
             play_sounds("bleep.mp3")
             block_list.remove(block)
+            wall_break += 1
+
+    # checks if the wall has been destroyed and start fase two
+    if wall_break == 112:
+        create_wall()
+        wall_break = 0
 
     # ball collision with the paddle
     if ball.y >= 605:
@@ -173,9 +225,9 @@ while game_loop:
         paddle_x += 0
 
     # draw objects
-    pygame.draw.ellipse(screen, (255, 255, 255), ball)
+    pygame.draw.ellipse(screen, white_color, ball)
     screen.blit(paddle, (paddle_x, 625))
-    screen.blit(score_text, score_text_rect)
+    show_score()
 
     for block in block_list:
         pygame.draw.rect(screen, block[1], block[0])

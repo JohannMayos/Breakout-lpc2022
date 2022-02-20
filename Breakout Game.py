@@ -140,7 +140,6 @@ while game_loop:
         ball_dy *= 1
         play_sounds("solid.wav")
 
-
     # ball collision with upper wall
     if ball.y <= 0:
         ball_dx *= 1
@@ -148,7 +147,7 @@ while game_loop:
         play_sounds("solid.wav")
 
     # ball collision with left wall
-    if ball.x == 1:
+    if ball.x <= 0:
         ball_dx *= -1
         ball_dy *= 1
         play_sounds("solid.wav")

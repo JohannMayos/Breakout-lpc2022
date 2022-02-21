@@ -112,7 +112,6 @@ def run_game():
         screen.blit(score_text_1, (170, 90))
         screen.blit(score_text_2, (570, 90))
 
-
     # define life points fuction and your draw
     def show_life_point():
         life_points_text_1 = score_font.render(str(life_points_1), True, white_color, background_color)
@@ -120,7 +119,6 @@ def run_game():
 
         screen.blit(life_points_text_1, (450, 5))
         screen.blit(life_points_text_2, (150, 5))
-
 
     # define the pause and lose screen function
     def pause():
@@ -185,10 +183,10 @@ def run_game():
                 elif event.key == pygame.K_p:
                     pause()
                 elif event.key == pygame.K_q:
-                        pygame.quit()
-                        quit()
+                    pygame.quit()
+                    quit()
                 elif event.key == pygame.K_r:
-                        run_game()
+                    run_game()
             elif event.type == pygame.KEYUP:
                 if event.key == pygame.K_LEFT:
                     paddle_move_left = False
@@ -285,7 +283,6 @@ def run_game():
 
                 screen.blit(quit_text, (150, 450))
                 screen.blit(restart_text, (150, 550))
-
 
         # ball collision with right wall
         if ball.x > 680:

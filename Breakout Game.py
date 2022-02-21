@@ -154,18 +154,6 @@ def run_game():
                 screen.blit(pause_text, (150, 250))
                 screen.blit(quit_text, (150, 350))
 
-                pygame.display.update()
-                game_clock.tick(15)
-            
-            elif life_points_1 == 4:
-                lose_text = font.render("GAME OVER!", True, white_color)
-                quit_text = font.render("Press Q to quit", True, white_color)
-                restart_text = font.render("Press R to restart", True, white_color)
-
-                screen.blit(lose_text, (150, 250))
-                screen.blit(quit_text, (150, 350))
-                screen.blit(restart_text, (150, 450))
-
             pygame.display.update()
             game_clock.tick(15)
 
@@ -196,6 +184,11 @@ def run_game():
                     paddle_move_right = True
                 elif event.key == pygame.K_p:
                     pause()
+                elif event.key == pygame.K_q:
+                        pygame.quit()
+                        quit()
+                elif event.key == pygame.K_r:
+                        run_game()
             elif event.type == pygame.KEYUP:
                 if event.key == pygame.K_LEFT:
                     paddle_move_left = False
@@ -235,22 +228,25 @@ def run_game():
 
                 score_1 += block[2]
                 play_sounds("bleep.mp3")
-                block_list.remove(block)
+
+                if life_points_1 != 4:
+                    block_list.remove(block)
+
                 wall_break += 1
 
         # ball speed up after 4 blocks destroyed
         if wall_break == 4:
-            ball_dy *= 1.02
+            ball_dy *= -1.02
             ball_dx *= 1.02
 
         # ball speed up after 12 blocks destroyed
         if wall_break == 12:
-            ball_dy *= 1.03
+            ball_dy *= -1.03
             ball_dx *= 1.03
 
         # ball speed up after 60 blocks destroyed
         if wall_break == 60:
-            ball_dy *= 1.04
+            ball_dy *= -1.04
             ball_dx *= 1.04
 
         # checks if the wall has been destroyed and start phase two
@@ -279,8 +275,17 @@ def run_game():
                 ball_dy *= 1
                 game_clock.tick(5)
 
+            # End game screen
             else:
-                pause()
+                paddler_width = 720
+                paddle = pygame.Rect(0, 625, paddler_width, 20)
+                font = pygame.font.Font('breakout.ttf', 44)
+                restart_text = font.render("Press R to restart", True, white_color)
+                quit_text = font.render("Press Q to quit", True, white_color)
+
+                screen.blit(quit_text, (150, 450))
+                screen.blit(restart_text, (150, 550))
+
 
         # ball collision with right wall
         if ball.x > 680:

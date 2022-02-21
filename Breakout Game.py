@@ -2,6 +2,7 @@ import pygame
 
 pygame.init()
 
+
 # define run game function to reload game
 def run_game():
 
@@ -39,7 +40,6 @@ def run_game():
     block_list = []
     wall_break = 0
 
-
     # define draw lines color function
     def draw_line_blocks():
 
@@ -55,7 +55,6 @@ def run_game():
         pygame.draw.line(screen, block_green, (705, 272), (705, 232), 20)
         pygame.draw.line(screen, block_yellow, (705, 312), (705, 272), 20)
 
-
     # define the wall blocks function
     def create_wall():
         block_individual = []
@@ -66,27 +65,26 @@ def run_game():
                 block_y = row * block_height + 152
 
                 if row == 0 or row == 1:
-                        color = block_red
-                        score = 7
+                    color = block_red
+                    score = 7
                 elif row == 2 or row == 3:
-                        color = block_orange
-                        score = 5
+                    color = block_orange
+                    score = 5
                 elif row == 4 or row == 5:
-                        color = block_green
-                        score = 3
+                    color = block_green
+                    score = 3
                 elif row == 6 or row == 7:
-                        color = block_yellow
-                        score = 1
+                    color = block_yellow
+                    score = 1
 
                 block = pygame.Rect(block_x, block_y, block_width, block_height)
                 block_individual = [block, color, score]
                 block_list.append(block_individual)
 
-    # define the souns function
+    # define the sounds function
     def play_sounds(none):
         sounds = pygame.mixer.Sound(none)
         sounds.play()
-
 
     # score
     score_1 = 0
@@ -97,7 +95,6 @@ def run_game():
 
     # score text
     score_font = pygame.font.Font('breakout.ttf', 44)
-
 
     # define the score function
     def show_score():
@@ -113,14 +110,12 @@ def run_game():
         screen.blit(score_text_1, (170, 90))
         screen.blit(score_text_2, (570, 90))
 
-
     def show_life_point():
         life_points_text_1 = score_font.render(str(life_points_1), True, white_color, background_color)
         life_points_text_2 = score_font.render(str(life_points_2), True, white_color, background_color)
 
         screen.blit(life_points_text_1, (450, 5))
         screen.blit(life_points_text_2, (150, 5))
-
 
     # define the pause function
     def pause():
@@ -158,7 +153,7 @@ def run_game():
                 game_clock.tick(15)
             
             elif life_points_1 == 4:
-                lose_text = font.render("YOU LOSE", True, white_color)
+                lose_text = font.render("GAME OVER!", True, white_color)
                 quit_text = font.render("Press Q to quit", True, white_color)
                 restart_text = font.render("Press R to restart", True, white_color)
 
@@ -168,7 +163,6 @@ def run_game():
 
             pygame.display.update()
             game_clock.tick(15)
-
 
     # game loop
     game_loop = True
@@ -183,7 +177,7 @@ def run_game():
         
         # clear screen and set background again
         screen.fill(background_color)
-        screen.blit(background,(0,0))
+        screen.blit(background, (0, 0))
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -216,19 +210,20 @@ def run_game():
         for block in block_list:
             if ball.colliderect(block[0]):
                 ball_dy *= -1
+                ball_dx *= 1
                 score_1 += block[2]
                 play_sounds("bleep.mp3")
                 block_list.remove(block)
                 wall_break += 1
 
-        # checks if the wall has been destroyed and start fase two
+        # checks if the wall has been destroyed and start phase two
         if wall_break == 112:
             create_wall()
             wall_break = 0
 
         # ball collision with the paddle
         if ball.colliderect(paddle):
-            if (paddle.x == ball.x + 25 or paddle.x + 25 == ball.x) and ball.y > 650:
+            if (paddle.x == ball.x + 75 or paddle.x + 75 == ball.x) and ball.y > 650:
                 ball_dy *= -1
                 ball_dx *= -1
                 play_sounds("solid.wav")

@@ -90,7 +90,6 @@ def run_game():
 
     # score, life points
     score_1 = 0
-    score_2 = 0
     life_points_1 = 1
     life_points_2 = 1
     first_time = True
@@ -209,7 +208,7 @@ def run_game():
         ball.y += ball_dy
 
         # reduction of the paddler by half after passing the red line
-        if ball.y > 152 and first_time:
+        if ball.y < 152 and first_time:
             paddler_width = 25
             paddle = pygame.Rect(300, 625, paddler_width, 20)
             first_time = False

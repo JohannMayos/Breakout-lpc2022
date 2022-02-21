@@ -1,6 +1,8 @@
 import pygame
+import pygame.locals
 
 pygame.init()
+
 
 # define run game function to reload game
 def run_game():
@@ -38,7 +40,7 @@ def run_game():
     cols = 14
     block_list = []
     wall_break = 0
-
+    collision_tresh = 5
 
     # define draw lines color function
     def draw_line_blocks():
@@ -55,7 +57,6 @@ def run_game():
         pygame.draw.line(screen, block_green, (705, 272), (705, 232), 20)
         pygame.draw.line(screen, block_yellow, (705, 312), (705, 272), 20)
 
-
     # define the wall blocks function
     def create_wall():
         block_individual = []
@@ -66,37 +67,36 @@ def run_game():
                 block_y = row * block_height + 152
 
                 if row == 0 or row == 1:
-                        color = block_red
-                        score = 7
+                    color = block_red
+                    score = 7
                 elif row == 2 or row == 3:
-                        color = block_orange
-                        score = 5
+                    color = block_orange
+                    score = 5
                 elif row == 4 or row == 5:
-                        color = block_green
-                        score = 3
+                    color = block_green
+                    score = 3
                 elif row == 6 or row == 7:
-                        color = block_yellow
-                        score = 1
+                    color = block_yellow
+                    score = 1
 
                 block = pygame.Rect(block_x, block_y, block_width, block_height)
                 block_individual = [block, color, score]
                 block_list.append(block_individual)
 
-    # define the souns function
+    # define the sounds function
     def play_sounds(none):
         sounds = pygame.mixer.Sound(none)
         sounds.play()
 
-
-    # score, life points
+    # score
     score_1 = 0
     life_points_1 = 1
     life_points_2 = 1
-    first_time = True
+    first_time_red_line = True
+    first_time_orange_line = True
 
     # score text
     score_font = pygame.font.Font('breakout.ttf', 44)
-
 
     # define the score function
     def show_score():
@@ -158,7 +158,7 @@ def run_game():
                 game_clock.tick(15)
             
             elif life_points_1 == 4:
-                lose_text = font.render("YOU LOSE", True, white_color)
+                lose_text = font.render("GAME OVER!", True, white_color)
                 quit_text = font.render("Press Q to quit", True, white_color)
                 restart_text = font.render("Press R to restart", True, white_color)
 
@@ -168,7 +168,6 @@ def run_game():
 
             pygame.display.update()
             game_clock.tick(15)
-
 
     # game loop
     game_loop = True
@@ -183,7 +182,7 @@ def run_game():
         
         # clear screen and set background again
         screen.fill(background_color)
-        screen.blit(background,(0,0))
+        screen.blit(background, (0, 0))
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -207,35 +206,72 @@ def run_game():
         ball.x += ball_dx
         ball.y += ball_dy
 
-        # reduction of the paddler by half after passing the red line
-        if ball.y < 152 and first_time:
+        # reduction of the paddler by half and increase speed ball after passing the red line
+        if ball.y < 152 and first_time_red_line:
             paddler_width = 25
             paddle = pygame.Rect(300, 625, paddler_width, 20)
-            first_time = False
+            ball_dy *= 1.1
+            ball_dx *= 1.1
+            first_time_red_line = False
+
+        # increase speed ball after passing the orange line
+        if ball.y < 192 and first_time_orange_line:
+            ball_dy *= 1.1
+            ball_dx *= 1.1
+            first_time_orange_line = False
 
         # block collision and scoring up
         for block in block_list:
             if ball.colliderect(block[0]):
-                ball_dy *= -1
+                # checking the collision side
+                if abs(block[0].top - ball.bottom) < collision_tresh and ball_dy > 0:
+                    ball_dy *= -1
+                elif abs(block[0].bottom - ball.top) < collision_tresh and ball_dy < 0:
+                    ball_dy *= -1
+                elif abs(block[0].right - ball.left) < collision_tresh and ball_dx < 0:
+                    ball_dx *= -1
+                elif abs(block[0].left - ball.right) < collision_tresh and ball_dx > 0:
+                    ball_dx *= -1
+
                 score_1 += block[2]
                 play_sounds("bleep.mp3")
                 block_list.remove(block)
                 wall_break += 1
 
-        # checks if the wall has been destroyed and start fase two
+        # ball speed up after 4 blocks destroyed
+        if wall_break == 4:
+            ball_dy *= 1.02
+            ball_dx *= 1.02
+
+        # ball speed up after 12 blocks destroyed
+        if wall_break == 12:
+            ball_dy *= 1.03
+            ball_dx *= 1.03
+
+        # ball speed up after 60 blocks destroyed
+        if wall_break == 60:
+            ball_dy *= 1.04
+            ball_dx *= 1.04
+
+        # checks if the wall has been destroyed and start phase two
         if wall_break == 112:
             create_wall()
             wall_break = 0
 
         # ball collision with the paddle
         if ball.colliderect(paddle):
+            if abs(ball.bottom - paddle.top) < collision_tresh:
                 ball_dy *= -1
                 ball_dx *= 1
+                play_sounds("solid.wav")
+            elif abs(ball.left - paddle.right) < collision_tresh or abs(ball.right - paddle.left) < collision_tresh:
+                ball_dy *= -1
+                ball_dx *= -1
                 play_sounds("solid.wav")
 
         # ball´s death point
         if ball.y > 650:
-            if life_points_1 != 4:
+            if life_points_1 < 4:
                 life_points_1 += 1
                 ball.x = 400
                 ball.y = 400
@@ -269,18 +305,18 @@ def run_game():
             paddle.x = 0
 
         # paddle collision with right wall
-        if paddle.x >= 625:
-            paddle.x = 625
+        if paddle.x >= 655:
+            paddle.x = 655
 
         # player up movement
         if paddle_move_left:
-            paddle.x -= 5
+            paddle.x -= 7
         else:
             paddle.x += 0
 
         # player down movement
         if paddle_move_right:
-            paddle.x += 5
+            paddle.x += 7
         else:
             paddle.x += 0
 

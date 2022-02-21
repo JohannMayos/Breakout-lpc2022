@@ -216,6 +216,21 @@ def run_game():
                 block_list.remove(block)
                 wall_break += 1
 
+        # ball speed up after 4 blocks destroyed
+        if wall_break == 4:
+            ball_dy *= -1.02
+            ball_dx *= 1.02
+
+        # ball speed up after 12 blocks destroyed
+        if wall_break == 12:
+            ball_dy *= -1.03
+            ball_dx *= 1.03
+
+        # ball speed up after 60 blocks destroyed
+        if wall_break == 60:
+            ball_dy *= -1.04
+            ball_dx *= 1.04
+
         # checks if the wall has been destroyed and start phase two
         if wall_break == 112:
             create_wall()
@@ -234,7 +249,7 @@ def run_game():
 
         # ball´s death point
         if ball.y > 650:
-            if life_points_1 != 4:
+            if life_points_1 < 4:
                 life_points_1 += 1
                 ball.x = 400
                 ball.y = 400

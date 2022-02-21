@@ -238,7 +238,7 @@ def run_game():
 
         # ball collision with the paddle
         if ball.colliderect(paddle):
-            if (paddle.x == ball.x + 75 or paddle.x + 75 == ball.x) and ball.y > 650:
+            if (paddle.x == ball.x + 75 and paddle.x + 75 == ball.x) and ball.y > 650:
                 ball_dy *= -1
                 ball_dx *= -1
                 play_sounds("solid.wav")

@@ -79,7 +79,8 @@ def run_game():
                     color = block_yellow
                     score = 1
 
-                block = pygame.Rect(block_x, block_y, block_width, block_height)
+                block = pygame.Rect(block_x, block_y, block_width,
+                                    block_height)
                 block_individual = [block, color, score]
                 block_list.append(block_individual)
 
@@ -101,21 +102,27 @@ def run_game():
     # define the score function
     def show_score():
         if score_1 < 10:
-            score_text_1 = score_font.render("00" + str(score_1), True, white_color, background_color)
+            score_text_1 = score_font.render("00" + str(score_1), True,
+                                             white_color, background_color)
         elif score_1 >= 10 and score_1 < 100:
-            score_text_1 = score_font.render("0" + str(score_1), True, white_color, background_color)
+            score_text_1 = score_font.render("0" + str(score_1), True,
+                                             white_color, background_color)
         else:
-            score_text_1 = score_font.render(str(score_1), True, white_color, background_color)
+            score_text_1 = score_font.render(str(score_1), True,
+                                             white_color, background_color)
 
-        score_text_2 = score_font.render("000", True, white_color, background_color)
+        score_text_2 = score_font.render("000", True,
+                                         white_color, background_color)
 
         screen.blit(score_text_1, (170, 90))
         screen.blit(score_text_2, (570, 90))
 
     # define life points fuction and your draw
     def show_life_point():
-        life_points_text_1 = score_font.render(str(life_points_1), True, white_color, background_color)
-        life_points_text_2 = score_font.render(str(life_points_2), True, white_color, background_color)
+        life_points_text_1 = score_font.render(str(life_points_1), True,
+                                               white_color, background_color)
+        life_points_text_2 = score_font.render(str(life_points_2), True,
+                                               white_color, background_color)
 
         screen.blit(life_points_text_1, (450, 5))
         screen.blit(life_points_text_2, (150, 5))
@@ -145,8 +152,10 @@ def run_game():
 
             if life_points_1 != 4:
                 pause = font.render("Paused", True, white_color)
-                pause_text = font.render("Press C to continue", True, white_color)
-                quit_text = font.render("Press Q to quit", True, white_color)
+                pause_text = font.render("Press C to continue", True,
+                                         white_color)
+                quit_text = font.render("Press Q to quit", True,
+                                        white_color)
 
                 screen.blit(pause, (150, 150))
                 screen.blit(pause_text, (150, 250))
@@ -197,7 +206,8 @@ def run_game():
         ball.x += ball_dx
         ball.y += ball_dy
 
-        # reduction of the paddler by half and increase speed ball after passing the red line
+        # reduction of the paddler by half and increase speed ball after
+        # passing the red line
         if ball.y < 152 and first_time_red_line:
             paddler_width = 25
             paddle = pygame.Rect(300, 625, paddler_width, 20)
@@ -215,13 +225,17 @@ def run_game():
         for block in block_list:
             if ball.colliderect(block[0]):
                 # checking the collision side
-                if abs(block[0].top - ball.bottom) < collision_tresh and ball_dy > 0:
+                if abs(block[0].top - ball.bottom) < collision_tresh \
+                        and ball_dy > 0:
                     ball_dy *= -1
-                elif abs(block[0].bottom - ball.top) < collision_tresh and ball_dy < 0:
+                elif abs(block[0].bottom - ball.top) < collision_tresh \
+                        and ball_dy < 0:
                     ball_dy *= -1
-                elif abs(block[0].right - ball.left) < collision_tresh and ball_dx < 0:
+                elif abs(block[0].right - ball.left) < collision_tresh \
+                        and ball_dx < 0:
                     ball_dx *= -1
-                elif abs(block[0].left - ball.right) < collision_tresh and ball_dx > 0:
+                elif abs(block[0].left - ball.right) < collision_tresh \
+                        and ball_dx > 0:
                     ball_dx *= -1
 
                 score_1 += block[2]
@@ -258,7 +272,8 @@ def run_game():
                 ball_dy *= -1
                 ball_dx *= 1
                 play_sounds("solid.wav")
-            elif abs(ball.left - paddle.right) < collision_tresh or abs(ball.right - paddle.left) < collision_tresh:
+            elif abs(ball.left - paddle.right) < collision_tresh or \
+                    abs(ball.right - paddle.left) < collision_tresh:
                 ball_dy *= -1
                 ball_dx *= -1
                 play_sounds("solid.wav")
@@ -278,8 +293,10 @@ def run_game():
                 paddler_width = 720
                 paddle = pygame.Rect(0, 625, paddler_width, 20)
                 font = pygame.font.Font('breakout.ttf', 44)
-                restart_text = font.render("Press R to restart", True, white_color)
-                quit_text = font.render("Press Q to quit", True, white_color)
+                restart_text = font.render("Press R to restart", True,
+                                           white_color)
+                quit_text = font.render("Press Q to quit", True,
+                                        white_color)
 
                 screen.blit(quit_text, (150, 450))
                 screen.blit(restart_text, (150, 550))

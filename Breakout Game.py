@@ -88,7 +88,7 @@ def run_game():
         sounds.play()
 
 
-    # score
+    # score, life points
     score_1 = 0
     score_2 = 0
     life_points_1 = 1
@@ -114,6 +114,7 @@ def run_game():
         screen.blit(score_text_2, (570, 90))
 
 
+    # define life points fuction and your draw
     def show_life_point():
         life_points_text_1 = score_font.render(str(life_points_1), True, white_color, background_color)
         life_points_text_2 = score_font.render(str(life_points_2), True, white_color, background_color)
@@ -122,7 +123,7 @@ def run_game():
         screen.blit(life_points_text_2, (150, 5))
 
 
-    # define the pause function
+    # define the pause and lose screen function
     def pause():
 
         paused = True
@@ -207,7 +208,8 @@ def run_game():
         ball.x += ball_dx
         ball.y += ball_dy
 
-        if ball.y < 152 and first_time:
+        # reduction of the paddler by half after passing the red line
+        if ball.y > 152 and first_time:
             paddler_width = 25
             paddle = pygame.Rect(300, 625, paddler_width, 20)
             first_time = False
@@ -228,11 +230,6 @@ def run_game():
 
         # ball collision with the paddle
         if ball.colliderect(paddle):
-            if (paddle.x == ball.x + 25 or paddle.x + 25 == ball.x) and ball.y > 650:
-                ball_dy *= -1
-                ball_dx *= -1
-                play_sounds("solid.wav")
-            else:
                 ball_dy *= -1
                 ball_dx *= 1
                 play_sounds("solid.wav")
